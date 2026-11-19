@@ -4,7 +4,7 @@
 
 const CONFIG = {
   birthdayISO: "2026-12-04T00:00:00+05:30",
-  testMode: false, // true = test immediately
+  testMode: true, // true = test immediately
   secretPin: "041206",
   formspreeEndpoint: "https://formspree.io/f/xzepljrz",
   photo: "bavani-photo.jpg"
