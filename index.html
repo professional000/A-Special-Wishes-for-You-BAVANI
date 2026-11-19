@@ -1,260 +1,203 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#160d35">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09051d">
   <title>For Bavani ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <canvas id="starField" aria-hidden="true"></canvas>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
 
-  <!-- BACKGROUND EFFECTS -->
-  <div class="background-glow"></div>
-  <div id="particles"></div>
-  <div id="starExplosion"></div>
+  <button class="music-toggle" id="musicToggle" type="button">♫ <span>Music</span></button>
+  <audio id="bgMusic" src="romantic.mp3" loop preload="none"></audio>
 
-  <!-- SCREEN 1 : WELCOME -->
-  <section class="screen active" id="s1">
-    <div class="glass welcome-card">
-      <div class="main-emoji">🎁</div>
-
-      <p class="small-title">A little surprise for you</p>
-      <h1>Hey Bavani! ❤️</h1>
-
-      <p class="description">
-        Someone special has prepared something magical for you.
-      </p>
-
-      <button onclick="startExperience()">
-        Open Your Surprise ✨
-      </button>
-    </div>
-  </section>
-
-
-  <!-- SCREEN 2 : COUNTDOWN -->
-  <section class="screen" id="s2">
-    <div class="glass">
-      <div class="main-emoji">⏳</div>
-
-      <p class="small-title">The special moment is coming</p>
-      <h1>Birthday Countdown</h1>
-
-      <div class="countdown">
-        <div><strong id="days">00</strong><span>Days</span></div>
-        <div><strong id="hours">00</strong><span>Hours</span></div>
-        <div><strong id="minutes">00</strong><span>Minutes</span></div>
-        <div><strong id="seconds">00</strong><span>Seconds</span></div>
+  <main>
+    <!-- 1. Gift opening -->
+    <section class="screen active" id="screen1">
+      <div class="hero-copy">
+        <p class="eyebrow">A LITTLE UNIVERSE MADE FOR YOU</p>
+        <p class="script-line">For my special girl</p>
+        <h1 class="hero-name">Bavani</h1>
+        <h2 class="birthday-title">Happy Birthday <span>♡</span></h2>
+        <p class="intro">A little surprise is waiting for you...</p>
       </div>
 
-      <p id="countdownMessage">
-        Something beautiful is waiting for you ❤️
-      </p>
-
-      <button id="countdownButton" onclick="next(3)" hidden>
-        Continue ✨
-      </button>
-    </div>
-  </section>
-
-
-  <!-- SCREEN 3 : PASSWORD -->
-  <section class="screen" id="s3">
-    <div class="glass">
-      <div class="main-emoji">🔐</div>
-
-      <h1>One Little Secret</h1>
-      <p>Enter the secret password to continue.</p>
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-        autocomplete="off"
-      >
-
-      <button onclick="checkPassword()">Unlock ❤️</button>
-      <p id="passwordMessage"></p>
-    </div>
-  </section>
-
-
-  <!-- SCREEN 4 : 26 MESSAGE CARDS -->
-  <section class="screen" id="s4">
-    <div class="message-heading">
-      <p class="small-title">A little something for you</p>
-      <h1>26 Reasons to Smile ❤️</h1>
-      <p>Swipe left to discover the next surprise.</p>
-    </div>
-
-    <div class="message-stage" id="messageStage">
-      <div class="message-card" id="messageCard">
-        <div class="message-emoji" id="messageEmoji">✨</div>
-
-        <div class="message-letter" id="messageLetter">A</div>
-
-        <h2 id="messageTitle">A Beautiful Soul</h2>
-
-        <p id="messageText">
-          You make the world a little more beautiful.
-        </p>
-
-        <div class="swipe-hint" id="swipeHint">
-          ← Swipe to continue →
+      <div class="gift-stage">
+        <div class="orbit orbit-a"></div>
+        <div class="orbit orbit-b"></div>
+        <div class="hero-gift" id="heroGift" role="button" tabindex="0">
+          <span class="gift-bow">🎀</span>
+          <span class="gift-emoji">🎁</span>
         </div>
+        <div class="rose rose-left">🌹</div>
+        <div class="rose rose-right">🌹</div>
       </div>
-    </div>
 
-    <div class="message-progress">
-      <span id="messageCount">1 / 26</span>
-      <div class="progress-track">
-        <div id="progressBar"></div>
-      </div>
-    </div>
+      <button class="primary-btn" data-go="2">🎁 TAP TO OPEN YOUR GIFT</button>
+      <p class="tiny-note">Made with love, just for Bavani ✨</p>
+    </section>
 
-    <p class="message-footer">
-      Every message is written with a little love 💗
-    </p>
-  </section>
+    <!-- 2. Countdown -->
+    <section class="screen" id="screen2">
+      <div class="glass-card">
+        <div class="planet">🌙</div>
+        <p class="eyebrow">THE MOMENT IS GETTING CLOSER</p>
+        <h2 class="section-title">A Magical Countdown</h2>
+        <p class="muted">Your special day begins at midnight, Bavani.</p>
 
-
-  <!-- SCREEN 5 : GIFT -->
-  <section class="screen" id="s5">
-    <div class="glass">
-      <p class="small-title">One more surprise</p>
-      <h1>A Gift For You 🎁</h1>
-
-      <p>Something special is waiting inside.</p>
-
-      <div class="gift-area" id="giftArea" onclick="openGift()">
-        <div class="gift-box">
-          <div class="gift-lid"></div>
-          <div class="gift-body"></div>
-          <div class="gift-ribbon"></div>
-          <div class="gift-bow"></div>
+        <div class="countdown">
+          <div class="time-tile"><strong id="days">000</strong><span>DAYS</span></div>
+          <div class="time-tile"><strong id="hours">00</strong><span>HOURS</span></div>
+          <div class="time-tile"><strong id="minutes">00</strong><span>MINUTES</span></div>
+          <div class="time-tile"><strong id="seconds">00</strong><span>SECONDS</span></div>
         </div>
 
-        <div class="gift-sparkle">✨</div>
+        <p class="count-status" id="countStatus"></p>
+        <button class="primary-btn" id="countContinue" disabled>WAIT FOR MIDNIGHT</button>
+        <p class="tiny-note">04 December 2026 · 12:00 AM · India time</p>
       </div>
+    </section>
 
-      <p id="giftMessage">Tap the gift to open it ❤️</p>
-    </div>
-  </section>
+    <!-- 3. PIN -->
+    <section class="screen" id="screen3">
+      <div class="glass-card pin-card">
+        <div class="pin-orb">✦</div>
+        <p class="eyebrow">ONE LITTLE SECRET</p>
+        <h2 class="section-title">Only for you, Bavani! 💗</h2>
+        <p class="muted">Enter the six-digit magic code to unlock your universe.</p>
 
+        <div class="pin-dots" id="pinDots">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
 
-  <!-- SCREEN 6 : SCRATCH PHOTO -->
-  <section class="screen" id="s6">
-    <div class="glass photo-card">
-      <p class="small-title">A memory for you</p>
-      <h1>Your Special Photo 📸</h1>
+        <p class="pin-error" id="pinError"></p>
 
-      <p>Gently scratch the surface to reveal your surprise.</p>
+        <div class="keypad" id="keypad">
+          <button data-key="1">1</button>
+          <button data-key="2">2</button>
+          <button data-key="3">3</button>
+          <button data-key="4">4</button>
+          <button data-key="5">5</button>
+          <button data-key="6">6</button>
+          <button data-key="7">7</button>
+          <button data-key="8">8</button>
+          <button data-key="9">9</button>
+          <button data-key="clear" class="key-muted">C</button>
+          <button data-key="0">0</button>
+          <button data-key="back" class="key-muted">⌫</button>
+        </div>
 
-      <div class="scratch-frame" id="scratchFrame">
-        <img
-          src="bavani-photo.jpg"
-          id="birthdayPhoto"
-          alt="Bavani's special photo"
-        >
+        <button class="primary-btn" id="unlockPin">UNLOCK ✨</button>
+      </div>
+    </section>
 
-        <canvas id="scratchCanvas"></canvas>
+    <!-- 4. A-Z scratch messages -->
+    <section class="screen" id="screen4">
+      <div class="messages-shell">
+        <p class="eyebrow">26 LITTLE REASONS TO SMILE</p>
+        <h2 class="section-title">A to Z, With Love 💌</h2>
+        <p class="muted">Scratch the glowing card to reveal each message. Then swipe to the next letter.</p>
 
-        <div class="photo-overlay" id="photoOverlay">
-          <span>✨</span>
-          <strong>Scratch Here</strong>
-          <small>A little memory is waiting...</small>
+        <div class="message-progress">
+          <span id="messageProgress">01 / 26</span>
+          <div class="progress-track"><i id="progressFill"></i></div>
+        </div>
+
+        <div class="message-viewport" id="messageViewport">
+          <article class="letter-card" id="letterCard">
+            <div class="letter-top">
+              <span id="letterCount">LETTER 01</span>
+              <span>✦ A LITTLE WISH ✦</span>
+            </div>
+            <div class="letter-symbol" id="letterSymbol">A</div>
+            <h3 id="letterHeading">A is for Always</h3>
+            <p class="letter-message" id="letterMessage"></p>
+            <div class="scratch-layer-wrap" id="scratchLayerWrap">
+              <canvas id="messageScratch"></canvas>
+              <span class="scratch-hint" id="scratchHint">✧ SCRATCH TO REVEAL ✧</span>
+            </div>
+          </article>
+        </div>
+
+        <p class="swipe-hint" id="swipeHint">After revealing, swipe left to continue →</p>
+        <p class="tiny-note">No next button — just a gentle swipe 💫</p>
+      </div>
+    </section>
+
+    <!-- 5. Gift -->
+    <section class="screen" id="screen5">
+      <div class="glass-card">
+        <div class="gift-big" id="finalGift" role="button" tabindex="0">🎁</div>
+        <p class="eyebrow">ONE LAST LITTLE GIFT</p>
+        <h2 class="section-title">Something From My Heart</h2>
+        <p class="muted">A special message is wrapped inside this little box.</p>
+
+        <button class="primary-btn" id="openFinalGift">OPEN YOUR GIFT 💝</button>
+
+        <div class="revealed-note" id="revealedNote" hidden>
+          <h3>For you, Bavani ❤️</h3>
+          <p>May your days be filled with genuine smiles, peaceful moments and dreams that come true. You deserve all the beautiful things life has to offer. Keep shining, keep smiling and never forget how special you are. Happy Birthday! 🥹💗</p>
+          <button class="secondary-btn" id="toPuzzle">CONTINUE TO YOUR PHOTO →</button>
         </div>
       </div>
+    </section>
 
-      <p id="scratchMessage">Keep scratching to reveal the photo 💗</p>
+    <!-- 6. Photo puzzle -->
+    <section class="screen" id="screen6">
+      <div class="glass-card puzzle-card">
+        <p class="eyebrow">A MEMORY TO PUT TOGETHER</p>
+        <h2 class="section-title">Our Little Picture Puzzle 🧩</h2>
+        <p class="muted">Tap two pieces to swap them. Complete the picture to reveal your memory.</p>
 
-      <button id="photoContinue" onclick="next(7)" hidden>
-        Continue ❤️
-      </button>
-    </div>
-  </section>
+        <div class="puzzle-board" id="puzzleBoard"></div>
 
+        <div class="puzzle-footer">
+          <span id="puzzleCount">0 / 9 pieces in place</span>
+          <button class="text-btn" id="shufflePuzzle">Shuffle ↻</button>
+        </div>
 
-  <!-- SCREEN 7 : BIRTHDAY WISH -->
-  <section class="screen" id="s7">
-    <div class="glass">
-      <div class="main-emoji">🎂</div>
+        <div class="puzzle-win" id="puzzleWin" hidden>
+          <div class="star-burst">✦ ✨ ⭐ ✨ ✦</div>
+          <h3>Beautifully completed! ❤️</h3>
+          <p>Some memories are worth putting together.</p>
+          <button class="primary-btn" id="toReply">LEAVE A LITTLE MESSAGE 💌</button>
+        </div>
 
-      <p class="small-title">Today is all about you</p>
-      <h1>Happy Birthday Bavani! ❤️</h1>
-
-      <div class="birthday-message">
-        <p>
-          May your life be filled with endless happiness,
-          beautiful memories and countless reasons to smile.
-        </p>
-
-        <p>
-          May every dream you hold in your heart come true.
-          Never stop smiling and never stop being the wonderful
-          person you are.
-        </p>
-
-        <p>
-          You deserve all the happiness in this world.
-        </p>
-
-        <h2>Happy Birthday! 🥳</h2>
+        <p class="tiny-note">Add your picture as <b>bavani-photo.jpg</b> in this folder.</p>
       </div>
+    </section>
 
-      <button onclick="next(8)">One Last Thing 💌</button>
-    </div>
-  </section>
+    <!-- 7. Reply form -->
+    <section class="screen" id="screen7">
+      <div class="glass-card">
+        <div class="planet">💌</div>
+        <p class="eyebrow">A LITTLE SOMETHING FROM YOU</p>
+        <h2 class="section-title">Your Turn, Bavani</h2>
+        <p class="muted">What did you feel when you opened this surprise? I'd love to read your words.</p>
 
+        <form id="replyForm">
+          <label for="replyName">Your name</label>
+          <input id="replyName" name="name" value="Bavani" required>
 
-  <!-- SCREEN 8 : REPLY -->
-  <section class="screen" id="s8">
-    <div class="glass">
-      <div class="main-emoji">💌</div>
+          <label for="replyMessage">Your message</label>
+          <textarea id="replyMessage" name="message" rows="5" placeholder="Write what's in your heart... ❤️" required></textarea>
 
-      <h1>Your Turn, Bavani!</h1>
+          <button class="primary-btn" id="sendReply" type="submit">SEND WITH LOVE 💕</button>
+        </form>
 
-      <p>
-        I hope this little surprise made you smile.
-        I would love to know what you think.
-      </p>
-
-      <form
-        id="replyForm"
-        action="https://formspree.io/f/xzepljrz"
-        method="POST"
-      >
-        <textarea
-          name="message"
-          id="replyMessage"
-          placeholder="Write your reply here..."
-          required
-        ></textarea>
-
-        <input
-          type="hidden"
-          name="_subject"
-          value="Bavani's Birthday Surprise Reply"
-        >
-
-        <button type="submit" id="replyButton">
-          Send Your Reply ❤️
-        </button>
-      </form>
-
-      <p id="replyStatus"></p>
-      <p class="final-love">With lots of love ❤️</p>
-    </div>
-  </section>
-
-
-  <!-- MUSIC -->
-  <audio id="backgroundMusic" loop>
-    <source src="romantic.mp3" type="audio/mpeg">
-  </audio>
+        <p class="form-status" id="formStatus"></p>
+        <p class="tiny-note">Your message will be sent through Formspree.</p>
+      </div>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
