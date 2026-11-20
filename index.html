@@ -168,30 +168,54 @@
       </div>
     </section>
 
-    <!-- 6. Photo puzzle -->
-    <section class="screen" id="screen6">
-      <div class="glass-card puzzle-card">
-        <p class="eyebrow">A MEMORY TO PUT TOGETHER</p>
-        <h2 class="section-title">Our Little Picture Puzzle 🧩</h2>
-        <p class="muted">Tap two pieces to swap them. Complete the picture to reveal your memory.</p>
+    
+<!-- 6. SCRATCH PHOTO REVEAL -->
+<section class="screen" id="screen6">
+  <div class="glass-card puzzle-card">
 
-        <div class="puzzle-board" id="puzzleBoard"></div>
+    <p class="eyebrow">A SPECIAL MEMORY FOR YOU</p>
 
-        <div class="puzzle-footer">
-          <span id="puzzleCount">0 / 9 pieces in place</span>
-          <button class="text-btn" id="shufflePuzzle">Shuffle ↻</button>
-        </div>
+    <h2 class="section-title">Your Special Gift 📸</h2>
 
-        <div class="puzzle-win" id="puzzleWin" hidden>
-          <div class="star-burst">✦ ✨ ⭐ ✨ ✦</div>
-          <h3>Beautifully completed! ❤️</h3>
-          <p>Some memories are worth putting together.</p>
-          <button class="primary-btn" id="toReply">LEAVE A LITTLE MESSAGE 💌</button>
-        </div>
+    <p class="muted">
+      Scratch the magical cover to reveal your beautiful surprise.
+    </p>
 
-        <p class="tiny-note">Add your picture as <b>bavani-photo.jpg</b> in this folder.</p>
-      </div>
-    </section>
+    <div class="photo-reveal-box" id="photoRevealBox">
+
+      <img
+        src="bavani-photo.jpg"
+        alt="A special birthday memory"
+        id="revealPhoto"
+      >
+
+      <canvas id="photoScratch"></canvas>
+
+      <span class="photo-scratch-hint" id="photoScratchHint">
+        ✨ SCRATCH TO REVEAL YOUR PHOTO ✨
+      </span>
+
+    </div>
+
+    <p class="photo-status" id="photoStatus">
+      A beautiful memory is waiting for you ❤️
+    </p>
+
+    <button
+      class="primary-btn"
+      id="toReply"
+      hidden
+    >
+      LEAVE A LITTLE MESSAGE 💌
+    </button>
+
+    <p class="tiny-note">
+      Made with love, just for Bavani 💗
+    </p>
+
+  </div>
+</section>
+    
 
     <!-- 7. Reply form -->
     <section class="screen" id="screen7">
