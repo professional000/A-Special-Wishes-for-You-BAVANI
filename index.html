@@ -99,38 +99,56 @@
       </div>
     </section>
 
-    <!-- 4. A-Z scratch messages -->
-    <section class="screen" id="screen4">
-      <div class="messages-shell">
-        <p class="eyebrow">26 LITTLE REASONS TO SMILE</p>
-        <h2 class="section-title">A to Z, With Love 💌</h2>
-        <p class="muted">Scratch the glowing card to reveal each message. Then swipe to the next letter.</p>
+    
+<!-- 4. A-Z SCRATCH MESSAGES -->
+<section class="screen" id="screen4">
+  <div class="messages-shell">
+    <p class="eyebrow">26 LITTLE REASONS TO SMILE</p>
+    <h2 class="section-title">A to Z, With Love 💌</h2>
+    <p class="muted">Scratch each card to reveal your special message. Swipe left for the next one.</p>
 
-        <div class="message-progress">
-          <span id="messageProgress">01 / 26</span>
-          <div class="progress-track"><i id="progressFill"></i></div>
-        </div>
-
-        <div class="message-viewport" id="messageViewport">
-          <article class="letter-card" id="letterCard">
-            <div class="letter-top">
-              <span id="letterCount">LETTER 01</span>
-              <span>✦ A LITTLE WISH ✦</span>
-            </div>
-            <div class="letter-symbol" id="letterSymbol">A</div>
-            <h3 id="letterHeading">A is for Always</h3>
-            <p class="letter-message" id="letterMessage"></p>
-            <div class="scratch-layer-wrap" id="scratchLayerWrap">
-              <canvas id="messageScratch"></canvas>
-              <span class="scratch-hint" id="scratchHint">✧ SCRATCH TO REVEAL ✧</span>
-            </div>
-          </article>
-        </div>
-
-        <p class="swipe-hint" id="swipeHint">After revealing, swipe left to continue →</p>
-        <p class="tiny-note">No next button — just a gentle swipe 💫</p>
+    <div class="message-progress">
+      <span id="messageProgress">01 / 26</span>
+      <div class="progress-track">
+        <i id="progressFill"></i>
       </div>
-    </section>
+    </div>
+
+    <div class="message-viewport" id="messageViewport">
+      <article class="letter-card" id="letterCard">
+
+        <div class="letter-top">
+          <span id="letterCount">LETTER 01</span>
+          <span>✦ A LITTLE WISH ✦</span>
+        </div>
+
+        <div class="letter-symbol" id="letterSymbol">A</div>
+
+        <h3 id="letterHeading">A is for Always</h3>
+
+        <div class="message-reveal-area">
+          <p class="letter-message" id="letterMessage"></p>
+
+          <canvas id="messageScratch"></canvas>
+
+          <span class="scratch-hint" id="scratchHint">
+            ✧ SCRATCH TO REVEAL ✧
+          </span>
+        </div>
+
+      </article>
+    </div>
+
+    <p class="swipe-hint" id="swipeHint">
+      Scratch to reveal your message ✨
+    </p>
+
+    <p class="tiny-note">
+      26 little wishes, made with love ❤️
+    </p>
+  </div>
+</section>
+    
 
     <!-- 5. Gift -->
     <section class="screen" id="screen5">
