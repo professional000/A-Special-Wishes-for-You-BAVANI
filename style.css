@@ -669,3 +669,103 @@ form .primary-btn {
     transition:none!important;
   }
 }
+
+
+/* ==================================
+   SCRATCH MESSAGE STYLE
+================================== */
+
+.message-reveal-area {
+  position: relative;
+  min-height: 115px;
+  margin: 12px auto;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,.05);
+  border: 1px solid #ffb4ee55;
+}
+
+.message-reveal-area .letter-message {
+  min-height: 115px;
+  margin: 0;
+  padding: 18px 12px;
+  display: grid;
+  place-items: center;
+}
+
+#messageScratch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.message-reveal-area .scratch-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: white;
+  text-shadow: 0 0 10px #ff6adf;
+  letter-spacing: 1.2px;
+}
+
+
+/* ==================================
+   PHOTO SCRATCH REVEAL STYLE
+================================== */
+
+.photo-reveal-box {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 1 / 1;
+  margin: 22px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e2a8ff88;
+  box-shadow:
+    0 0 12px #d96bff55,
+    0 0 28px #a33dff33;
+  background: #170d32;
+}
+
+.photo-reveal-box img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+#photoScratch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.photo-scratch-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 15px;
+  pointer-events: none;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 12px #ff69df;
+}
+
+.photo-status {
+  min-height: 24px;
+  font-size: 12px;
+  color: #ffd5f4;
+  margin: 14px 0;
+}
