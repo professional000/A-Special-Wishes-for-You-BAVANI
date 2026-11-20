@@ -175,7 +175,10 @@ function unlock() {
 $("unlockPin").addEventListener("click",unlock);
 
 
-/* A-Z MESSAGES */
+
+/* ==================================
+   A-Z INDIVIDUAL SCRATCH MESSAGES
+================================== */
 
 const alphabetMessages = [
   ["A","Always","A beautiful soul deserves endless happiness. ❤️"],
@@ -208,199 +211,382 @@ const alphabetMessages = [
 
 let messageIndex = 0;
 let messageRevealed = false;
-let scratchCtx = null;
 let scratchDown = false;
+let scratchCtx = null;
 let scratchLastCheck = 0;
+
+const messageCanvas = document.getElementById("messageScratch");
 
 function setupMessageCard() {
   renderMessage();
 }
 
 function renderMessage() {
-  const [letter,heading,message] = alphabetMessages[messageIndex];
 
-  $("letterCount").textContent =
-    `LETTER ${String(messageIndex+1).padStart(2,"0")}`;
+  const [letter, heading, message] =
+    alphabetMessages[messageIndex];
 
-  $("letterSymbol").textContent = letter;
-  $("letterHeading").textContent = `${letter} is for ${heading}`;
-  $("letterMessage").textContent = message;
+  document.getElementById("letterCount").textContent =
+    `LETTER ${String(messageIndex + 1).padStart(2,"0")}`;
 
-  $("messageProgress").textContent =
-    `${String(messageIndex+1).padStart(2,"0")} / 26`;
+  document.getElementById("letterSymbol").textContent = letter;
 
-  $("progressFill").style.width =
-    `${((messageIndex+1)/26)*100}%`;
+  document.getElementById("letterHeading").textContent =
+    `${letter} is for ${heading}`;
 
-  $("scratchHint").style.display = "grid";
+  document.getElementById("letterMessage").textContent = message;
 
-  $("swipeHint").textContent =
-    messageIndex === 25 ?
-    "You're at the final letter 💗" :
-    "After revealing, swipe left to continue →";
+  document.getElementById("messageProgress").textContent =
+    `${String(messageIndex + 1).padStart(2,"0")} / 26`;
+
+  document.getElementById("progressFill").style.width =
+    `${((messageIndex + 1) / 26) * 100}%`;
+
+  document.getElementById("scratchHint").style.display = "grid";
+
+  document.getElementById("swipeHint").textContent =
+    "Scratch to reveal your message ✨";
 
   messageRevealed = false;
-  drawScratchCover();
+
+  drawMessageScratch();
 }
 
-function drawScratchCover() {
-  const canvas = $("messageScratch");
-  const wrap = $("scratchLayerWrap");
-  const rect = wrap.getBoundingClientRect();
+function drawMessageScratch() {
 
-  const dpr = Math.min(window.devicePixelRatio || 1,1.5);
+  const canvas = messageCanvas;
+  const area = canvas.parentElement;
+  const rect = area.getBoundingClientRect();
 
-  canvas.width = Math.max(1,Math.round(rect.width*dpr));
-  canvas.height = Math.max(1,Math.round(rect.height*dpr));
+  if (!rect.width || !rect.height) return;
 
-  canvas.style.width = rect.width+"px";
-  canvas.style.height = rect.height+"px";
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-  scratchCtx = canvas.getContext("2d",{willReadFrequently:true});
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
 
-  scratchCtx.setTransform(dpr,0,0,dpr,0,0);
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+
+  scratchCtx = canvas.getContext("2d", {
+    willReadFrequently: true
+  });
+
+  scratchCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   const gradient = scratchCtx.createLinearGradient(
-    0,0,rect.width,rect.height
+    0, 0, rect.width, rect.height
   );
 
-  gradient.addColorStop(0,"#a33ed2");
-  gradient.addColorStop(.5,"#452071");
-  gradient.addColorStop(1,"#bd4eaa");
+  gradient.addColorStop(0, "#a33ed2");
+  gradient.addColorStop(.5, "#452071");
+  gradient.addColorStop(1, "#bd4eaa");
 
+  scratchCtx.globalCompositeOperation = "source-over";
   scratchCtx.fillStyle = gradient;
-  scratchCtx.fillRect(0,0,rect.width,rect.height);
+  scratchCtx.fillRect(0, 0, rect.width, rect.height);
 
-  scratchCtx.fillStyle = "rgba(255,255,255,.9)";
+  scratchCtx.fillStyle = "#ffffff";
   scratchCtx.textAlign = "center";
-  scratchCtx.font = "600 12px DM Sans";
+  scratchCtx.font = "600 12px sans-serif";
+
   scratchCtx.fillText(
     "SCRATCH HERE ✨",
-    rect.width/2,
-    rect.height/2+4
+    rect.width / 2,
+    rect.height / 2 + 4
   );
 }
 
-function scratchAt(event) {
+function scratchMessage(event) {
+
   if (!scratchDown || messageRevealed || !scratchCtx) return;
 
-  const canvas = $("messageScratch");
-  const rect = canvas.getBoundingClientRect();
+  const rect = messageCanvas.getBoundingClientRect();
 
-  const x = event.clientX-rect.left;
-  const y = event.clientY-rect.top;
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
 
   scratchCtx.globalCompositeOperation = "destination-out";
+
   scratchCtx.beginPath();
-  scratchCtx.arc(x,y,19,0,Math.PI*2);
+  scratchCtx.arc(x, y, 22, 0, Math.PI * 2);
   scratchCtx.fill();
 
-  if (performance.now()-scratchLastCheck > 180) {
+  if (performance.now() - scratchLastCheck > 200) {
     scratchLastCheck = performance.now();
-    checkScratchProgress();
+    checkMessageScratch();
   }
 }
 
-function checkScratchProgress() {
-  const canvas = $("messageScratch");
+function checkMessageScratch() {
 
-  if (!scratchCtx || !canvas.width || messageRevealed) return;
+  if (messageRevealed || !scratchCtx) return;
 
   const pixels = scratchCtx.getImageData(
-    0,0,canvas.width,canvas.height
+    0, 0, messageCanvas.width, messageCanvas.height
   ).data;
 
-  let clear = 0;
+  let transparent = 0;
   let samples = 0;
 
-  const step = 4*36;
-
-  for (let i=3;i<pixels.length;i+=step) {
+  for (let i = 3; i < pixels.length; i += 4 * 32) {
     samples++;
-    if (pixels[i]<70) clear++;
+
+    if (pixels[i] < 80) transparent++;
   }
 
-  if (samples && clear/samples>.43) {
+  if (samples && transparent / samples > 0.42) {
+
     messageRevealed = true;
 
-    scratchCtx.clearRect(0,0,canvas.width,canvas.height);
+    scratchCtx.clearRect(
+      0, 0, messageCanvas.width, messageCanvas.height
+    );
 
-    $("scratchHint").style.display = "none";
+    document.getElementById("scratchHint").style.display = "none";
 
-    $("swipeHint").textContent =
-      messageIndex === 25 ?
-      "All 26 wishes revealed — swipe left to continue 💗" :
-      "Now swipe left for the next letter →";
+    document.getElementById("swipeHint").textContent =
+      messageIndex === 25
+        ? "All 26 wishes revealed! Swipe left 💗"
+        : "✨ Message revealed! Swipe left for next →";
+
+    const rect = messageCanvas.getBoundingClientRect();
 
     starBurst(
-      canvas.getBoundingClientRect().left+canvas.clientWidth/2,
-      canvas.getBoundingClientRect().top+35,
-      10
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2,
+      18
     );
   }
 }
 
-const scratchCanvas = $("messageScratch");
+messageCanvas.addEventListener("pointerdown", event => {
 
-scratchCanvas.addEventListener("pointerdown",event => {
   if (messageRevealed) return;
 
   scratchDown = true;
-  scratchCanvas.setPointerCapture(event.pointerId);
-  scratchAt(event);
+  messageCanvas.setPointerCapture(event.pointerId);
+
+  scratchMessage(event);
 });
 
-scratchCanvas.addEventListener("pointermove",scratchAt);
+messageCanvas.addEventListener("pointermove", scratchMessage);
 
-["pointerup","pointercancel","lostpointercapture"].forEach(name => {
-  scratchCanvas.addEventListener(name,() => scratchDown=false);
+["pointerup", "pointercancel", "lostpointercapture"].forEach(type => {
+
+  messageCanvas.addEventListener(type, () => {
+    scratchDown = false;
+  });
+
 });
 
 
-/* SWIPE NAVIGATION */
+/* SWIPE TO NEXT MESSAGE */
 
 let swipeStartX = 0;
 let swipeStartY = 0;
 
-$("messageViewport").addEventListener("touchstart",event => {
+const messageViewport =
+  document.getElementById("messageViewport");
+
+messageViewport.addEventListener("touchstart", event => {
+
   swipeStartX = event.changedTouches[0].clientX;
   swipeStartY = event.changedTouches[0].clientY;
-},{passive:true});
 
-$("messageViewport").addEventListener("touchend",event => {
-  const dx = event.changedTouches[0].clientX-swipeStartX;
-  const dy = event.changedTouches[0].clientY-swipeStartY;
+}, { passive: true });
 
-  if (Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.25) {
-    advanceMessage(dx<0);
+messageViewport.addEventListener("touchend", event => {
+
+  const dx = event.changedTouches[0].clientX - swipeStartX;
+  const dy = event.changedTouches[0].clientY - swipeStartY;
+
+  if (
+    Math.abs(dx) > 55 &&
+    Math.abs(dx) > Math.abs(dy) * 1.25
+  ) {
+    advanceMessage(dx < 0);
   }
-},{passive:true});
 
-let mouseStartX = null;
-
-$("messageViewport").addEventListener("pointerdown",event => {
-  if (event.pointerType==="mouse") mouseStartX=event.clientX;
-});
-
-$("messageViewport").addEventListener("pointerup",event => {
-  if (mouseStartX!==null) {
-    const dx=event.clientX-mouseStartX;
-    if (Math.abs(dx)>65) advanceMessage(dx<0);
-    mouseStartX=null;
-  }
-});
+}, { passive: true });
 
 function advanceMessage(left) {
+
   if (!left || !messageRevealed) return;
 
-  if (messageIndex<25) {
+  if (messageIndex < 25) {
+
     messageIndex++;
     renderMessage();
+
   } else {
+
     goTo(5);
+
   }
 }
 
+
+/* ==================================
+   PHOTO SCRATCH REVEAL
+================================== */
+
+const photoCanvas = document.getElementById("photoScratch");
+
+let photoCtx = null;
+let photoDown = false;
+let photoRevealed = false;
+let photoLastCheck = 0;
+
+function setupPhotoScratch() {
+
+  const rect = photoCanvas.parentElement.getBoundingClientRect();
+
+  if (!rect.width || !rect.height) return;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+  photoCanvas.width = Math.round(rect.width * dpr);
+  photoCanvas.height = Math.round(rect.height * dpr);
+
+  photoCanvas.style.width = rect.width + "px";
+  photoCanvas.style.height = rect.height + "px";
+
+  photoCtx = photoCanvas.getContext("2d", {
+    willReadFrequently: true
+  });
+
+  photoCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const gradient = photoCtx.createLinearGradient(
+    0, 0, rect.width, rect.height
+  );
+
+  gradient.addColorStop(0, "#b43be0");
+  gradient.addColorStop(.5, "#4b237c");
+  gradient.addColorStop(1, "#ed64bd");
+
+  photoCtx.fillStyle = gradient;
+  photoCtx.fillRect(0, 0, rect.width, rect.height);
+
+  photoCtx.fillStyle = "#ffffff";
+  photoCtx.textAlign = "center";
+  photoCtx.font = "bold 13px sans-serif";
+
+  photoCtx.fillText(
+    "SCRATCH YOUR SURPRISE ✨",
+    rect.width / 2,
+    rect.height / 2
+  );
+}
+
+function scratchPhoto(event) {
+
+  if (!photoDown || photoRevealed || !photoCtx) return;
+
+  const rect = photoCanvas.getBoundingClientRect();
+
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  photoCtx.globalCompositeOperation = "destination-out";
+
+  photoCtx.beginPath();
+  photoCtx.arc(x, y, 25, 0, Math.PI * 2);
+  photoCtx.fill();
+
+  if (performance.now() - photoLastCheck > 200) {
+    photoLastCheck = performance.now();
+    checkPhotoScratch();
+  }
+}
+
+function checkPhotoScratch() {
+
+  if (photoRevealed || !photoCtx) return;
+
+  const pixels = photoCtx.getImageData(
+    0, 0, photoCanvas.width, photoCanvas.height
+  ).data;
+
+  let clear = 0;
+  let total = 0;
+
+  for (let i = 3; i < pixels.length; i += 4 * 32) {
+
+    total++;
+
+    if (pixels[i] < 80) clear++;
+  }
+
+  if (total && clear / total > 0.45) {
+
+    photoRevealed = true;
+
+    photoCtx.clearRect(
+      0, 0, photoCanvas.width, photoCanvas.height
+    );
+
+    document.getElementById("photoScratchHint").style.display = "none";
+
+    document.getElementById("photoStatus").textContent =
+      "Your beautiful memory is revealed! ❤️✨";
+
+    document.getElementById("toReply").hidden = false;
+
+    const rect = photoCanvas.getBoundingClientRect();
+
+    starBurst(
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2,
+      45
+    );
+  }
+}
+
+photoCanvas.addEventListener("pointerdown", event => {
+
+  if (photoRevealed) return;
+
+  photoDown = true;
+  photoCanvas.setPointerCapture(event.pointerId);
+
+  scratchPhoto(event);
+});
+
+photoCanvas.addEventListener("pointermove", scratchPhoto);
+
+["pointerup", "pointercancel", "lostpointercapture"].forEach(type => {
+
+  photoCanvas.addEventListener(type, () => {
+    photoDown = false;
+  });
+
+});
+
+
+/* PHOTO REVEAL NAVIGATION */
+
+document.getElementById("toReply").addEventListener(
+  "click",
+  () => goTo(7)
+);
+
+
+/* RESIZE SUPPORT */
+
+window.addEventListener("resize", () => {
+
+  if (currentScreen === 4 && !messageRevealed) {
+    drawMessageScratch();
+  }
+
+  if (currentScreen === 6 && !photoRevealed) {
+    setupPhotoScratch();
+  }
+
+});
+  
 
 /* FINAL GIFT */
 
@@ -424,88 +610,6 @@ $("finalGift").addEventListener("keydown",event => {
 });
 
 $("toPuzzle").addEventListener("click",()=>goTo(6));
-
-
-/* PHOTO PUZZLE */
-
-let puzzleOrder=[];
-let selectedPiece=null;
-
-function shuffleArray(array) {
-  const copy=[...array];
-
-  for (let i=copy.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [copy[i],copy[j]]=[copy[j],copy[i]];
-  }
-
-  return copy;
-}
-
-function buildPuzzle() {
-  puzzleOrder=shuffleArray([0,1,2,3,4,5,6,7,8]);
-
-  if (puzzleOrder.every((value,index)=>value===index)) {
-    puzzleOrder=[1,0,2,3,4,5,6,7,8];
-  }
-
-  selectedPiece=null;
-  $("puzzleWin").hidden=true;
-  renderPuzzle();
-}
-
-function renderPuzzle() {
-  const board=$("puzzleBoard");
-  board.innerHTML="";
-
-  puzzleOrder.forEach((piece,position) => {
-    const tile=document.createElement("button");
-
-    tile.type="button";
-    tile.className="puzzle-piece";
-    tile.setAttribute("aria-label",`Puzzle piece ${position+1}`);
-
-    const row=Math.floor(piece/3);
-    const col=piece%3;
-
-    tile.style.backgroundPosition=`${col*50}% ${row*50}%`;
-
-    if (selectedPiece===position) tile.classList.add("selected");
-
-    tile.addEventListener("click",()=>choosePuzzlePiece(position));
-
-    board.appendChild(tile);
-  });
-
-  const correct=puzzleOrder.filter(
-    (piece,index)=>piece===index
-  ).length;
-
-  $("puzzleCount").textContent=`${correct} / 9 pieces in place`;
-
-  if (correct===9) {
-    $("puzzleWin").hidden=false;
-    starBurst(window.innerWidth/2,window.innerHeight/2,45);
-  }
-}
-
-function choosePuzzlePiece(position) {
-  if (selectedPiece===null) {
-    selectedPiece=position;
-  } else if (selectedPiece===position) {
-    selectedPiece=null;
-  } else {
-    [puzzleOrder[selectedPiece],puzzleOrder[position]] =
-    [puzzleOrder[position],puzzleOrder[selectedPiece]];
-
-    selectedPiece=null;
-  }
-
-  renderPuzzle();
-}
-
-$("shufflePuzzle").addEventListener("click",buildPuzzle);
-$("toReply").addEventListener("click",()=>goTo(7));
 
 
 /* FORMSPREE REPLY */
